@@ -1,0 +1,22 @@
+service: aws-node-rest-api-typescript
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  environment:
+    NODE_ENV: dev
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+functions:
+  hello:
+    handler: src/handlers/getAllBlogs.getAllBlogs
+    events:
+      - http:
+          path: /allblogs
+          method: get
+          cors: true
