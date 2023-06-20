@@ -28,7 +28,7 @@ plugins:
 
 functions:
   hello:
-    handler: src/handlers/getAllBlogs.getAllBlogs
+    handler: src/handler.getAllBlogs
     events:
       - http:
           path: /allblogs
