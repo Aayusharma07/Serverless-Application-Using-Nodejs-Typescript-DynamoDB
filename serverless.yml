@@ -39,6 +39,13 @@ functions:
           path: /allblogs
           method: get
           cors: true
+  createBlog:
+    handler: src/handler.createBlog
+    events:
+      - http:
+          path: /create
+          method: post
+          cors: true
 
 resources:
   Resources:

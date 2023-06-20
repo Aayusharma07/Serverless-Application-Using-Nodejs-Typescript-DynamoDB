@@ -1,7 +1,5 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { getAllData } from '../services/dynamodb.service';
-import dotenv from 'dotenv';
-dotenv.config();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const getAllBlogsController = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
