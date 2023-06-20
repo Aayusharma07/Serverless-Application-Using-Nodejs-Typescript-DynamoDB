@@ -1,36 +1,57 @@
-service: aws-node-rest-api-typescript
+service: aws-node-rest-api-dynamodb-typescript
 
 frameworkVersion: '3'
+
+custom:
+  tableName: 'Blogs-Table-${self:provider.stage}'
 
 provider:
   name: aws
   runtime: nodejs18.x
   region: us-east-1
-  environment:
-    NODE_ENV: dev
-    DYNAMO_DB_TABLE: blog_project_table
+  stage: Dev
   iam:
     role:
       statements:
         - Effect: Allow
           Action:
+            - dynamodb:DescribeTable
             - dynamodb:Query
             - dynamodb:Scan
             - dynamodb:GetItem
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
-          Resource: "arn:aws:dynamodb:${opt:region, self:provider.region}:*:table/${self:provider.environment.DYNAMO_DB_TABLE}"
-
+          Resource: 
+            - { "Fn::GetAtt": ["BlogsTable", "Arn" ] }
+  environment:
+    BLOGS_TABLE: ${self:custom.tableName}
+    
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
 
 functions:
-  hello:
+  getAllBlogs:
     handler: src/handler.getAllBlogs
     events:
       - http:
           path: /allblogs
           method: get
           cors: true
+
+resources:
+  Resources:
+    BlogsTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName}
