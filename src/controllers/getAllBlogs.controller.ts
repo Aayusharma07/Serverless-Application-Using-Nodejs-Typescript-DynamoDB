@@ -7,7 +7,7 @@ dotenv.config();
 export const getAllBlogsController = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
   try {
     const params = {
-      TableName: process.env.DYNAMO_DB_TABLE || '',
+      TableName: process.env.BLOGS_TABLE || '',
     };
     const result = await getAllData(params);
     const response: APIGatewayProxyResult = {
