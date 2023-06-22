@@ -4,6 +4,7 @@ frameworkVersion: '3'
 
 custom:
   tableName: 'Blogs-Table-${self:provider.stage}'
+  tableName2: 'Users-Table-${self:provider.stage}'
 
 provider:
   name: aws
@@ -24,8 +25,10 @@ provider:
             - dynamodb:DeleteItem
           Resource: 
             - { "Fn::GetAtt": ["BlogsTable", "Arn" ] }
+            - { "Fn::GetAtt": ["UsersTable", "Arn" ] }
   environment:
     BLOGS_TABLE: ${self:custom.tableName}
+    USERS_TABLE: ${self:custom.tableName2}
     
 plugins:
   - serverless-plugin-typescript
@@ -46,6 +49,20 @@ functions:
           path: /create
           method: post
           cors: true
+  signUp:
+    handler: src/handler.signUp
+    events:
+      - http:
+          path: /signup
+          method: post
+          cors: true
+  signIn:
+    handler: src/handler.signIn
+    events:
+      - http:
+          path: /signin
+          method: post
+          cors: true
 
 resources:
   Resources:
@@ -62,3 +79,16 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.tableName}
+    UsersTable:
+      Type: 'AWS::DynamoDB::Table'
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: userName
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userName
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+        TableName: ${self:custom.tableName2}
