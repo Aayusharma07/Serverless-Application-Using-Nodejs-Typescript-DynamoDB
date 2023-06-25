@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import Joi, { ValidationResult } from 'joi';
 import { v4 as uuidv4 } from 'uuid';
 import { PutItemInput, PutItemInputAttributeMap } from 'aws-sdk/clients/dynamodb';

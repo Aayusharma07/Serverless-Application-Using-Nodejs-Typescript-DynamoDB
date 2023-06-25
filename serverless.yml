@@ -29,6 +29,7 @@ provider:
   environment:
     BLOGS_TABLE: ${self:custom.tableName}
     USERS_TABLE: ${self:custom.tableName2}
+    JWT_SECRET: 'qwertyuygtfdscfvgbhnjmkmjhgfdxcfvgbhnjmk'
     
 plugins:
   - serverless-plugin-typescript
@@ -36,7 +37,7 @@ plugins:
 
 functions:
   getAllBlogs:
-    handler: src/handler.getAllBlogs
+    handler: src/controllers/getAllBlogs.getAllBlogs
     events:
       - http:
           path: /allblogs

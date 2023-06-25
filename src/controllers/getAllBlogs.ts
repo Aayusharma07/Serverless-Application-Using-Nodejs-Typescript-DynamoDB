@@ -1,8 +1,10 @@
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { getAllData } from '../services/dynamodb.service';
+import middy from 'middy';
+import jwtMiddleware from '../middleware/validate.middleware';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getAllBlogsController = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
+const getAllBlogsController = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const { limit, exclusiveStartKey } = event.queryStringParameters || {};
   try {
     const params = {
@@ -24,3 +26,5 @@ export const getAllBlogsController = async (event: APIGatewayProxyEvent, context
     return response;
   }
 };
+
+export const getAllBlogs = middy(getAllBlogsController).use(jwtMiddleware());
