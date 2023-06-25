@@ -4,7 +4,7 @@ import middy from 'middy';
 import jwtMiddleware from '../middleware/validate.middleware';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const getAllBlogsController = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
+export const getAllBlogsController = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
   const { limit, exclusiveStartKey } = event.queryStringParameters || {};
   try {
     const params = {
