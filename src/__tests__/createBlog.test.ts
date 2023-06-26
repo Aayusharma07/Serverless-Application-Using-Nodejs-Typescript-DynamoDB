@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { createBlogController } from '../controllers/createBlog.controller';
 import { insertIntoDynamoDB } from '../services/dynamodb.service';
 
