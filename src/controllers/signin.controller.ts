@@ -56,7 +56,7 @@ export const signinController = async (event: APIGatewayProxyEvent, context: Con
 
     const response: APIGatewayProxyResult = {
       statusCode: 200,
-      body: JSON.stringify({ token }),
+      body: JSON.stringify({ message: 'Login Successful', token }),
     };
 
     return response;
