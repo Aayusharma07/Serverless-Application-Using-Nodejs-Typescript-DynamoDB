@@ -42,4 +42,42 @@ describe('signUpController', () => {
     expect(result.statusCode).toBe(200);
     expect(result.body).toBe(JSON.stringify({ data: 'inserted', message: 'User Signup Successfully' }));
   });
+
+  it('Handle validation firstName character length', async () => {
+    const mockEvent: any = {
+      body: JSON.stringify({
+        firstName: 'Jo',
+        lastName: 'Doe',
+        userName: 'johndoe',
+        email: 'johndoe@example.com',
+        password: 'Password@123',
+      }),
+    };
+    const result = await signUpController(mockEvent, {} as any);
+
+    expect(result.statusCode).toBe(400);
+    expect(result.body).toBe(
+      JSON.stringify({ error: 'Bad Request', message: '"firstName" length must be at least 3 characters long' })
+    );
+  });
+
+  it('should handle internal server error', async () => {
+    const mockEvent: any = {
+      body: JSON.stringify({
+        firstName: 'John',
+        lastName: 'Doe',
+        userName: 'johndoe',
+        email: 'johndoe@example.com',
+        password: 'Password@123',
+      }),
+    };
+
+    const mockInsertIntoDynamoDB = insertIntoDynamoDB as jest.MockedFunction<typeof insertIntoDynamoDB>;
+    mockInsertIntoDynamoDB.mockRejectedValueOnce('error');
+
+    const result = await signUpController(mockEvent, {} as any);
+
+    expect(result.statusCode).toBe(500);
+    expect(result.body).toBe(JSON.stringify({ error: 'Internal Server Error', data: 'error' }));
+  });
 });
