@@ -1,16 +1,23 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda';
 import { getAllData } from '../services/dynamodb.service';
 import middy from 'middy';
 import jwtMiddleware from '../middleware/validate.middleware';
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export const getAllBlogsController = async (event: APIGatewayProxyEvent, context: Context): Promise<APIGatewayProxyResult> => {
+export const getAllBlogsController = async (
+  event: APIGatewayProxyEvent,
+  context: Context
+): Promise<APIGatewayProxyResult> => {
   const { limit, exclusiveStartKey } = event.queryStringParameters || {};
+  const data = JSON.stringify({
+    id: `${exclusiveStartKey}`,
+  });
   try {
     const params = {
       TableName: process.env.BLOGS_TABLE || '',
       Limit: limit ? parseInt(limit, 10) : 10,
-      ExclusiveStartKey: exclusiveStartKey ? JSON.parse(decodeURIComponent(exclusiveStartKey)) : undefined,
+      ExclusiveStartKey: exclusiveStartKey ? JSON.parse(decodeURIComponent(data)) : undefined,
     };
     const result = await getAllData(params);
     const response: APIGatewayProxyResult = {
