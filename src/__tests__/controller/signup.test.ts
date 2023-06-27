@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { signUpController } from '../controllers/signup.controller';
-import { insertIntoDynamoDB } from '../services/dynamodb.service';
+import { signUpController } from '../../controllers/signup.controller';
+import { insertIntoDynamoDB } from '../../services/dynamodb.service';
 
-jest.mock('../services/dynamodb.service', () => ({
+jest.mock('../../services/dynamodb.service', () => ({
   insertIntoDynamoDB: jest.fn(),
 }));
 

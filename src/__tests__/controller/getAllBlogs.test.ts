@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Context } from 'aws-lambda';
-import { getAllData } from '../services/dynamodb.service';
-import { getAllBlogsController } from '../controllers/getAllBlogs';
+import { getAllData } from '../../services/dynamodb.service';
+import { getAllBlogsController } from '../../controllers/getAllBlogs';
 
-jest.mock('../services/dynamodb.service', () => ({
+jest.mock('../../services/dynamodb.service', () => ({
   getAllData: jest.fn(),
 }));
 

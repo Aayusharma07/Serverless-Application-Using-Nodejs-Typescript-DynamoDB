@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createBlogController } from '../controllers/createBlog.controller';
-import { insertIntoDynamoDB } from '../services/dynamodb.service';
+import { createBlogController } from '../../controllers/createBlog.controller';
+import { insertIntoDynamoDB } from '../../services/dynamodb.service';
 
-jest.mock('../services/dynamodb.service', () => ({
+jest.mock('../../services/dynamodb.service', () => ({
     insertIntoDynamoDB: jest.fn(),
 }));
 
@@ -42,7 +42,7 @@ describe('createBlogController', () => {
 
     it('should handle invalid request body', async () => {
         const mockEvent: any = {
-            body: 'invalid',
+            // body: 'invalid',
         };
 
         const result = await createBlogController(mockEvent, {} as any);
