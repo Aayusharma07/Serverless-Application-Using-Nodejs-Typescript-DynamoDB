@@ -23,14 +23,19 @@ provider:
             - dynamodb:PutItem
             - dynamodb:UpdateItem
             - dynamodb:DeleteItem
-          Resource: 
-            - { "Fn::GetAtt": ["BlogsTable", "Arn" ] }
-            - { "Fn::GetAtt": ["UsersTable", "Arn" ] }
+            - sqs:SendMessage
+            - sqs:DeleteMessage
+            - sqs:ReceiveMessage
+          Resource:
+            - { 'Fn::GetAtt': ['BlogsTable', 'Arn'] }
+            - { 'Fn::GetAtt': ['UsersTable', 'Arn'] }
+            - { 'Fn::GetAtt': ['MyQueue', 'Arn'] }
   environment:
     BLOGS_TABLE: ${self:custom.tableName}
     USERS_TABLE: ${self:custom.tableName2}
     JWT_SECRET: 'qwertyuygtfdscfvgbhnjmkmjhgfdxcfvgbhnjmk'
-    
+    QUEUE_URL: !Ref MyQueue
+
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
@@ -64,6 +69,22 @@ functions:
           path: /signin
           method: post
           cors: true
+  send:
+    handler: src/additional/producer.producer
+    timeout: 60
+    events:
+      - http:
+          path: /send
+          method: get
+          cors: true
+  receive:
+    handler: src/additional/consumer.consumer
+    timeout: 60
+    events:
+      - http:
+          path: /receive
+          method: get
+          cors: true
 
 resources:
   Resources:
@@ -93,3 +114,10 @@ resources:
           ReadCapacityUnits: 1
           WriteCapacityUnits: 1
         TableName: ${self:custom.tableName2}
+    MyQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: my-fifo-queue.fifo
+        FifoQueue: true
+        ContentBasedDeduplication: true
+        VisibilityTimeout: 30
