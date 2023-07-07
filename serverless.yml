@@ -49,7 +49,7 @@ functions:
           method: get
           cors: true
   createBlog:
-    handler: src/handler.createBlog
+    handler: src/controllers/createBlog.createBlog
     events:
       - http:
           path: /create

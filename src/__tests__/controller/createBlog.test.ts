@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { createBlogController } from '../../controllers/createBlog.controller';
+import { createBlogController } from '../../controllers/createBlog';
 import { insertIntoDynamoDB } from '../../services/dynamodb.service';
 
 jest.mock('../../services/dynamodb.service', () => ({
