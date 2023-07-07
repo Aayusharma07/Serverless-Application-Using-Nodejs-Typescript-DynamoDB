@@ -2,6 +2,8 @@ import { APIGatewayProxyEvent, APIGatewayProxyResult, Context } from 'aws-lambda
 import { v4 as uuidv4 } from 'uuid';
 import { insertIntoDynamoDB } from '../services/dynamodb.service';
 import { PutItemInput, PutItemInputAttributeMap } from 'aws-sdk/clients/dynamodb';
+import middy from 'middy';
+import jwtMiddleware from '../middleware/validate.middleware';
 
 interface Data {
   author: string;
@@ -45,3 +47,5 @@ export const createBlogController = async (
     return response;
   }
 };
+
+export const createBlog = middy(createBlogController).use(jwtMiddleware());
